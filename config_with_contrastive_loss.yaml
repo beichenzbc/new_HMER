@@ -1,0 +1,89 @@
+# 实验名称
+experiment: "CAN"
+
+# 随机种子
+seed: 20211024
+
+# 训练参数
+epochs: 400
+batch_size: 4
+workers: 8
+train_parts: 1
+valid_parts: 1
+valid_start: 0
+save_start: 0
+grad_accumulation: 1
+use_ada_sampler: True
+optimizer: Adadelta
+lr: 1.0
+lr_decay: cosine
+step_ratio: 10
+step_decay: 5
+eps: 1e-6
+weight_decay: 1e-4
+beta: 0.9
+max_batch_size: 32
+max_image_size: 
+dropout: True
+dropout_ratio: 0.5
+relu: True
+gradient: 100
+gradient_clip: True
+use_label_mask: False
+
+# 训练数据
+train_image_hand_path: 'datasets/CROHME/train_images.pkl'
+train_image_standard_path: 'datasets/CROHME/train_images.pkl'
+train_label_path: 'datasets/CROHME/train_labels.txt'
+
+eval_image_hand_path: 'datasets/CROHME/14_test_images.pkl'
+eval_image_standard_path: 'datasets/CROHME/14_test_images.pkl'
+eval_label_path: 'datasets/CROHME/14_test_labels.txt'
+
+word_path: 'datasets/CROHME/words_dict.txt'
+
+# collate_fn
+collate_fn: collate_fn_two_source
+
+densenet:
+  ratio: 16
+  growthRate: 24
+  reduction: 0.5
+  bottleneck: True
+  use_dropout: True
+
+encoder:
+  input_channel: 1
+  out_channel: 684
+
+projection_dim: 128
+beta_start: 80
+beta_end: 180
+temperature: 1
+
+
+decoder:
+  net: AttDecoder
+  cell: 'GRU'
+  input_size: 256
+  hidden_size: 256
+
+counting_decoder:
+  in_channel: 684
+  out_channel: 111
+
+attention:
+  attention_dim: 512
+  word_conv_kernel: 1
+
+attention_map_vis_path: 'vis/attention_map'
+counting_map_vis_path: 'vis/counting_map'
+
+whiten_type: None
+max_step: 256
+
+optimizer_save: False
+finetune: False
+checkpoint_dir: 'checkpoints'
+checkpoint: ""
+log_dir: 'logs_new'

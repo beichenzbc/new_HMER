@@ -37,6 +37,36 @@ def load_config(yaml_path):
         params['attention']['word_conv_kernel'] = 1
     return params
 
+def load_config_two_source(yaml_path):
+    try:
+        with open(yaml_path, 'r') as f:
+            params = yaml.load(f, Loader=yaml.FullLoader)
+    except:
+        print('尝试UTF-8编码....')
+        with open(yaml_path, 'r', encoding='UTF-8') as f:
+            params = yaml.load(f, Loader=yaml.FullLoader)
+    if not params['experiment']:
+        print('实验名不能为空!')
+        exit(-1)
+    if (not params['train_image_hand_path']) or (not params['train_image_standard_path'])  :
+        print('训练图片路径不能为空！')
+        exit(-1)
+    if not params['train_label_path']:
+        print('训练label路径不能为空！')
+        exit(-1)
+    if not params['word_path']:
+        print('word dict路径不能为空！')
+        exit(-1)
+    if 'train_parts' not in params:
+        params['train_parts'] = 1
+    if 'valid_parts' not in params:
+        params['valid_parts'] = 1
+    if 'valid_start' not in params:
+        params['valid_start'] = 0
+    if 'word_conv_kernel' not in params['attention']:
+        params['attention']['word_conv_kernel'] = 1
+    return params
+
 
 def update_lr(optimizer, current_epoch, current_step, steps, epochs, initial_lr):
     if current_epoch < 1:
@@ -156,3 +186,16 @@ def compute_edit_distance(prediction, label):
     distance = cal_distance(prediction, label)
     return distance
     
+class AverageMeter(object):
+    def __init__(self):
+        self.reset()
+
+    def reset(self):
+        self.avg = 0
+        self.sum = 0
+        self.cnt = 0
+
+    def update(self, val, n=1):
+        self.sum += val * n
+        self.cnt += n
+        self.avg = self.sum / self.cnt
