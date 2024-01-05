@@ -21,7 +21,7 @@ The HME100K dataset can be download from the official website [HME100K](https://
 
 ## Training
 
-Check the config file ```config.yaml``` and train with the CROHME dataset:
+Check the config file ```config_with_contrastive_loss.yaml``` and train with the CROHME dataset:
 
 ```
 python train_stage.py --dataset CROHME
